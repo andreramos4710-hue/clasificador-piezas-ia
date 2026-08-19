@@ -9,3 +9,5 @@
 ### Avance del proyecto
 
 (aquí va lo que le agregaste a tu sistema)
+
+ya logure hacer push a github
