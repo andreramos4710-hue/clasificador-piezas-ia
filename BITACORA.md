@@ -3,16 +3,15 @@
 ## Semana 1 - Encuadre y configuración del entorno
 
 ### Antes de la clase
-
-(aquí van los entregables de los bloques del lunes)
+(Se descarga el programa que vamos a utilizar durante el semestre y se configuro el entorno, se configuro nustros repositorio, la busqueda de cosasa mas eficaz utilizando material adquirido, configurando entornos y todo lo que necesita)
 
 ### Avance del proyecto
 
-(aquí va lo que le agregaste a tu sistema)
+prueba agregar
+Este es el procedimiento para hacer push:
+- Para hacer push primero edito
+- Luego hago git add .
+- Luego git commit
+- Luego git push
 
-ya logure hacer push a github
 
-para hacer un push primero edito mi arctivo (code BITACORA.md)
-luego hago git add . 
-luego hago git commit -m (le escribo lo que quiera de mensaje)
-finalmente hago git push
