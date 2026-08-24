@@ -4,7 +4,7 @@ Proyecto del curso Inteligencia Artificial.
 
 - Alumno: Andre Sebastian Ramos Perez 
 - Código: 220647108
-- Dominio: clasificación por material (madera, metal, plástico)
+- Dominio: clasificación por Color
 
 ## Descripción
 
