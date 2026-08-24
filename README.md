@@ -1,5 +1,14 @@
-# clasificador_piezas_ia
+# Clasificador de piezas - Material
 
-esto va a servir para mi clase 
+Proyecto del curso Inteligencia Artificial.
 
-Andre sebastian Ramos Perez
+- Alumno: Andre Sebastian Ramos Perez 
+- Código: 220647108
+- Dominio: clasificación por material (madera, metal, plástico)
+
+## Descripción
+
+Sistema que lee señales de sensores mientras una pieza pasa frente a ellos,
+clasifica de qué tipo es con un modelo de aprendizaje de máquina y acciona
+un actuador para enrutarla. Crece semana a semana con los temas del curso:
+adquisición, características, clasificación, anomalías y despliegue en PLC.
