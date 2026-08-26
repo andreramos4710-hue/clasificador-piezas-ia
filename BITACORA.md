@@ -28,6 +28,16 @@ Actuador (salida):
 
 ## Semana  2 la primera selñal del sensor 
 
+### Antes de clase 
+ 1. Que sensor vas a usar y que tipo de salida tiene: usare el sensor tcrt5000 el cual va a ser para detectar el color de los objectos y es de una salida analogica
+
+ 2. Tres líneas de ejemplo tal como se van a ver saliendo de tu Arduino, con valores plausibles para tu caso. 
+ - 996
+ - 1015
+ - 1018
+
+ 3. Por qué el Arduino no puede mandar Serial.println("Leyendo...").
+ El Arduino manda solo datos, nunca mensajes para humanos.
 
 
 
