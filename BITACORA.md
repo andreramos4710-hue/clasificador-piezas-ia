@@ -26,6 +26,14 @@ Actuador (salida):
 
 - Si es creativo, genero comparaciones, tablas o ideas nuevas.
 
+## Semana  2 la primera selñal del sensor 
+
+
+
+
+
+
+
 
 
 ### Avance del proyecto
