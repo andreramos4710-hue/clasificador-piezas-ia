@@ -8,7 +8,10 @@ void setup() {
 }
 
 void loop() {
+
   int valor = analogRead(PIN_TCR5000);
+
   Serial.println(valor);
-  delay(10);            // 10 ms -> 100 muestras por segundo
+
+  delay(20);   // 20 ms -> 50 muestras por segundo
 }
