@@ -40,7 +40,6 @@ Actuador (salida):
  El Arduino manda solo datos, nunca mensajes para humanos.
 
 ## Bloque 2: leerlo desde Python, y a qué velocidad
-# BITÁCORA
 
 ## Lectura del sensor TCR5000
 
