@@ -39,11 +39,47 @@ Actuador (salida):
  3. Por qué el Arduino no puede mandar Serial.println("Leyendo...").
  El Arduino manda solo datos, nunca mensajes para humanos.
 
+## Bloque 2: leerlo desde Python, y a qué velocidad
+# BITÁCORA
 
+## Lectura del sensor TCR5000
 
+Para esta práctica se utilizó un sensor **TCR5000** mediante su salida analógica (AO), conectada a la entrada **A0 del Arduino**.
 
+### 1. ¿Cuánto tarda la pieza en cruzar frente al sensor?
 
+Se estima que la pieza tarda aproximadamente **0.5 segundos** en cruzar frente al sensor TCR5000.
 
+### 2. ¿Qué `delay()` se necesita para tener al menos 20 muestras del evento?
+
+Se necesitan al menos 20 muestras durante los 0.5 segundos que tarda la pieza en pasar.
+
+Se realiza el cálculo:
+
+**0.5 s ÷ 20 muestras = 0.025 s**
+
+Por lo tanto:
+
+**0.025 s = 25 ms**
+
+El `delay()` máximo sería de **25 ms**.
+
+### 3. ¿Cuántas muestras da eso mientras la pieza pasa?
+
+Con un delay de 20  se obtiene aproximadamente:
+
+**1000 ms ÷ 20 ms = 50 muestras por segundo**
+
+Como la pieza tarda aproximadamente 0.5 segundos:
+
+**0.5 s × 50 muestras/s = 25 muestras**
+
+Por lo tanto, se obtienen aproximadamente **25 muestras mientras la pieza pasa frente al sensor**.
+
+Esto supera las **20 muestras mínimas** solicitadas.
+
+### 4. Ajuste del `delay()` en `sensor.ino`
+el delay queda en 20 
 
 
 ### Avance del proyecto
