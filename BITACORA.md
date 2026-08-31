@@ -1,7 +1,5 @@
 # Bitácora del proyecto
-
 ## Semana 1 - Encuadre y configuración del entorno
-
 ### Antes de la clase
 Se descarga el programa que vamos a utilizar durante el semestre y se configuro el entorno, se configuro nustros repositorio, la busqueda de cosasa mas eficaz utilizando material adquirido, configurando entornos y todo lo que necesita
 
@@ -26,8 +24,17 @@ Actuador (salida):
 
 - Si es creativo, genero comparaciones, tablas o ideas nuevas.
 
-## Semana  2 la primera selñal del sensor 
+### Avance del proyecto
 
+prueba agregar
+Este es el procedimiento para hacer push:
+- Para hacer push primero edito
+- Luego hago git add .
+- Luego git commit
+- Luego git push
+
+## Semana  2 la primera selñal del sensor 
+## Bloque 1
 ### Antes de clase 
  1. Que sensor vas a usar y que tipo de salida tiene: usare el sensor tcrt5000 el cual va a ser para detectar el color de los objectos y es de una salida analogica
 
@@ -40,53 +47,59 @@ Actuador (salida):
  El Arduino manda solo datos, nunca mensajes para humanos.
 
 ## Bloque 2: leerlo desde Python, y a qué velocidad
-
 ## Lectura del sensor TCR5000
 
-Para esta práctica se utilizó un sensor **TCR5000** mediante su salida analógica (AO), conectada a la entrada **A0 del Arduino**.
+Para esta práctica se utilizó un sensor TCR5000 mediante su salida analógica (AO), conectada a la entrada A0 del Arduino.
 
-### 1. ¿Cuánto tarda la pieza en cruzar frente al sensor?
+### ¿Cuánto tarda la pieza en cruzar frente al sensor?
 
-Se estima que la pieza tarda aproximadamente **0.5 segundos** en cruzar frente al sensor TCR5000.
+Se estima que la pieza tarda aproximadamente 0.5 segundos en cruzar frente al sensor TCR5000.
 
-### 2. ¿Qué `delay()` se necesita para tener al menos 20 muestras del evento?
+### ¿Qué delay se necesita para tener al menos 20 muestras del evento?
 
 Se necesitan al menos 20 muestras durante los 0.5 segundos que tarda la pieza en pasar.
 
 Se realiza el cálculo:
 
-**0.5 s ÷ 20 muestras = 0.025 s**
+0.5 s ÷ 20 muestras = 0.025 s
 
 Por lo tanto:
 
-**0.025 s = 25 ms**
+0.025 s = 25 ms
 
-El `delay()` máximo sería de **25 ms**.
+El delay máximo sería de 25 ms.
 
-### 3. ¿Cuántas muestras da eso mientras la pieza pasa?
+### ¿Cuántas muestras da eso mientras la pieza pasa?
 
 Con un delay de 20  se obtiene aproximadamente:
 
-**1000 ms ÷ 20 ms = 50 muestras por segundo**
+1000 ms ÷ 20 ms = 50 muestras por segundo
 
 Como la pieza tarda aproximadamente 0.5 segundos:
 
-**0.5 s × 50 muestras/s = 25 muestras**
+0.5 s × 50 muestras/s = 25 muestras
 
-Por lo tanto, se obtienen aproximadamente **25 muestras mientras la pieza pasa frente al sensor**.
+Por lo tanto, se obtienen aproximadamente 25 muestras mientras la pieza pasa frente al sensor.
 
-Esto supera las **20 muestras mínimas** solicitadas.
+Esto supera las 20 muestras mínimas solicitadas.
 
-### 4. Ajuste del `delay()` en `sensor.ino`
+### 4. Ajuste del delay en sensor.ino
 el delay queda en 20 
 
 
+### Semana 3 - Recolección de datos etiquetados (U2)
+## Antes de clase 
+## Bloque 1 
+
+las columnas que son exactas de tu datos.csv, en el cual contene cada uno del nombre de cada unaa y que guarda:
+ventana,P,Valor,Tipo
+
+tus etiquetas, escritas tal cual como van a aparecer en el archivo:
+Rojo,Blanco,Negro
+
+cinco filas de ejemplo de tu tabla, con valores plausibles de tu sensor: 
+
+## Bloque 2
+
 ### Avance del proyecto
-
-prueba agregar
-Este es el procedimiento para hacer push:
-- Para hacer push primero edito
-- Luego hago git add .
-- Luego git commit
-- Luego git push
-
+difinir las databases que se van a usar en cada uno de nuestros sensores y marcando las etiquetas que cada uno va a usar. 
