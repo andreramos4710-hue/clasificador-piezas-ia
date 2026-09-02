@@ -98,8 +98,16 @@ tus etiquetas, escritas tal cual como van a aparecer en el archivo:
 Rojo,Blanco,Negro
 
 cinco filas de ejemplo de tu tabla, con valores plausibles de tu sensor: 
+523 blanco 
+410 rojo 
+85 negro 
 
 ## Bloque 2
+- Cuántas ventanas por clase vas a capturar: 
+30 por cada una de las clases 
+- En qué orden: Blanco Rojo Negro 
+- Cómo vas a mantener pareja la velocidad de la mano, en concreto: voy a marcar una linea de 15 cm, y mi sensor va a estra ubicado en 5cm. 
+- A qué distancia del sensor va a pasar la pieza: aproximadamente a 3cm 
 
 ### Avance del proyecto
 difinir las databases que se van a usar en cada uno de nuestros sensores y marcando las etiquetas que cada uno va a usar. 
