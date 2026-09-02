@@ -9,7 +9,7 @@ import os
 import pandas as pd
 
 PUERTO = 'COM3'
-BAUDIOS = 115200
+BAUDIOS = 9600
 N_MUESTRAS = 200
 ARCHIVO = 'datos/datos.csv'
 

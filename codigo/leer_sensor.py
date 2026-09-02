@@ -5,7 +5,7 @@ import time
 import matplotlib.pyplot as plt
 
 PUERTO = 'COM3'          # el tuyo puede ser otro: COM4, COM5...
-BAUDIOS = 115200
+BAUDIOS = 9600
 N_MUESTRAS = 200        # con delay(20) son unos 4 segundos
 
 ser = serial.Serial(PUERTO, BAUDIOS, timeout=1)
