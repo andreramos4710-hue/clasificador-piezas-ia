@@ -124,3 +124,10 @@ El Arduino mide valores de 0 a 1023. Los valores fuera de este rango se consider
 Se eligió un filtro de 5 muestras porque cada ventana tiene 200 muestras. Esto ayuda a reducir el ruido sin cambiar demasiado la señal.
 
 ### Bloque 2
+
+- ¿Cuánto se movió tu línea base entre la primera y la última ventana de la sesión?
+La línea base se calculó utilizando el promedio de las primeras 20 muestras de cada ventana. Al comparar la primera y la última ventana hubo una deriva en la señal.
+- ¿Qué normalización elegiste y por qué?
+Elegí la normalización Min-Max, porque las lecturas del sensor tienen un rango conocido y permite llevar los valores a un rango de 0 a 1, facilitando el procesamiento posterior del clasificador.
+- ¿Al comparar antes y después: ¿se parecen más entre sí las ventanas de una misma clase?
+Después de corregir la línea base, las ventanas de una misma clase presentan formas más parecidas y comienzan cerca de un mismo nivel, ayudando a identificar las diferencias entre las piezas y no las variaciones. 
