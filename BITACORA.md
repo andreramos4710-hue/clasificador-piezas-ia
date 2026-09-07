@@ -116,3 +116,11 @@ difinir las databases que se van a usar en cada uno de nuestros sensores y marca
 ### Antes de clase 
 ### bloque 1 
  
+- ¿Qué tipo de ruido ves en tu señal y de dónde crees que viene? 
+El sensor presentar pequeñas variaciones en las lecturas debido a interferencias eléctricas, cables,o cambios de luz del salon que interfieren en varias ocasiones. 
+- Qué rango físico tiene tu sensor y qué valores estás descartando por imposibles.
+El Arduino mide valores de 0 a 1023. Los valores fuera de este rango se consideran incorrectos y se eliminan.
+- Qué tamaño de filtro elegiste y por qué, en relación con la duración de tu evento.
+Se eligió un filtro de 5 muestras porque cada ventana tiene 200 muestras. Esto ayuda a reducir el ruido sin cambiar demasiado la señal.
+
+### Bloque 2
