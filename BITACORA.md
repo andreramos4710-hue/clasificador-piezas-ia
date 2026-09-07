@@ -111,3 +111,8 @@ cinco filas de ejemplo de tu tabla, con valores plausibles de tu sensor:
 
 ### Avance del proyecto
 difinir las databases que se van a usar en cada uno de nuestros sensores y marcando las etiquetas que cada uno va a usar. 
+
+### Semana 4 Limpieza y normalización de señales (U2)
+### Antes de clase 
+### bloque 1 
+ 
