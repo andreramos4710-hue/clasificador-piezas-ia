@@ -4,44 +4,58 @@ import serial
 import time
 import matplotlib.pyplot as plt
 
-PUERTO = 'COM3'          # el tuyo puede ser otro: COM4, COM5...
+# Puerto serial de Arduino
+PUERTO = 'COM3'          # El tuyo puede ser otro: COM4, COM5, COM8...
 BAUDIOS = 9600
-N_MUESTRAS = 200        # con delay(20) son unos 4 segundos
 
+# Número de muestras
+N_MUESTRAS = 200         # Con delay(10) son aproximadamente 2 segundos
+
+# Abrir puerto serial
 ser = serial.Serial(PUERTO, BAUDIOS, timeout=1)
-time.sleep(2)            # el Arduino se reinicia al abrir el puerto
+
+# El Arduino se reinicia al abrir el puerto
+time.sleep(2)
 
 valores = []
 
-print("Leyendo... pasa la pieza frente al sensor TCR5000")
+print("Leyendo... pasa la pieza frente al sensor")
 
+# Leer datos hasta obtener 200 muestras
 while len(valores) < N_MUESTRAS:
+
     linea = ser.readline().decode('utf-8').strip()
 
     try:
         valor = float(linea)
     except ValueError:
-        continue          # línea incompleta, la saltamos
+        continue          # Si la línea no es un número, la saltamos
 
     valores.append(valor)
-    print(valor)          # para ver la señal en vivo
 
+    # Mostrar la señal en vivo
+    print(valor)
+
+# Cerrar puerto serial
 ser.close()
 
 print(f"Listas {len(valores)} muestras")
 
-# Graficar los valores obtenidos
+# -------------------------------------------------
+# GRAFICAR LOS DATOS
+# -------------------------------------------------
+
 plt.figure(figsize=(10, 5))
 
 plt.plot(valores)
 
 plt.xlabel("Muestra")
-plt.ylabel("Valor analógico del TCR5000")
-plt.title("Señal del sensor TCR5000")
+plt.ylabel("Valor del sensor")
+plt.title("Señal del sensor")
 
 plt.grid(True)
 
-# Guardar la figura
+# Guardar la gráfica
 plt.savefig("../figuras/senal.png", dpi=300, bbox_inches="tight")
 
 # Mostrar la gráfica
