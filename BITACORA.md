@@ -131,3 +131,20 @@ La línea base se calculó utilizando el promedio de las primeras 20 muestras de
 Elegí la normalización Min-Max, porque las lecturas del sensor tienen un rango conocido y permite llevar los valores a un rango de 0 a 1, facilitando el procesamiento posterior del clasificador.
 - ¿Al comparar antes y después: ¿se parecen más entre sí las ventanas de una misma clase?
 Después de corregir la línea base, las ventanas de una misma clase presentan formas más parecidas y comienzan cerca de un mismo nivel, ayudando a identificar las diferencias entre las piezas y no las variaciones. 
+
+### Semana 5 Características en el dominio del tiempo (U2)
+### Antes de clase 
+### Bloque 1 
+
+| Característica      | ¿Por qué debería distinguir mis clases?                             |
+| ------------------- | ------------------------------------------------------------------- |
+| Media               | Permite conocer el valor promedio que genera cada color.            |
+| Desviación estándar | Indica cuánto cambia la señal mientras el sensor detecta la pieza.  |
+| Mínimo              | Puede mostrar qué tan baja llega la señal para cada color.          |
+| Máximo              | Permite comparar el valor más alto producido por cada color.        |
+| Rango               | Muestra la diferencia entre el valor máximo y mínimo de cada pieza. |
+| Duración            | Indica cuánto tiempo permanece la pieza frente al sensor.           |
+
+Predicción: Creo que el mínimo será la característica más útil porque cada color puede reflejar diferente cantidad de luz. La duración podría ser la menos útil porque depende de la velocidad con la que pase la pieza frente al sensor.
+
+### Bloque 2
