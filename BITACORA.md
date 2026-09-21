@@ -148,3 +148,13 @@ Después de corregir la línea base, las ventanas de una misma clase presentan f
 Predicción: Creo que el mínimo será la característica más útil porque cada color puede reflejar diferente cantidad de luz. La duración podría ser la menos útil porque depende de la velocidad con la que pase la pieza frente al sensor.
 
 ### Bloque 2
+
+- ¿Cuántas filas y cuántas columnas quedó tu features.csv, y por qué ese número de filas?
+El archivo features.csv quedó con 90 filas y 9 columnas. Las 90 filas corresponden a las ventanas obtenidas de las tres clases: Blanco, Negro y Rojo, y las columnas corresponden a las características calculadas de cada ventana.
+- ¿Qué par de características separa mejor tus clases, con la gráfica que lo muestra?
+Al analizar el diagrama de dispersión de rango vs duración, se observa que estas características permiten diferenciar la clase Negro, pero no separan correctamente las clases Blanco y Rojo, ya que sus puntos se encuentran encimados. Por lo tanto, es necesario probar otros pares de características para encontrar una mejor separación entre las tres clases.
+- Si hay dos clases que se encimen, ¿cuáles y qué vas a hacer?
+Las clases Blanco y Rojo se encuentran encimadas en la gráfica de rango vs duración, debido a que presentan valores muy similares. Para mejorar la separación, se probarán otras características, como media vs energía y desviación estándar vs rango, con el objetivo de encontrar un par que permita distinguir mejor las tres clases.
+
+### Avance del proyecto
+Se empezo con la creacion de las piezas a usar para empezar a darles un color especifico para mas muestreos y que solo se base en una solo calidad de color y tomar mas muestras en diferentes entornos para mayor adquisicion de datos para tener menor cantidad de errores al momento de una variacion. 
