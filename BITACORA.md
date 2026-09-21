@@ -157,4 +157,4 @@ Al analizar el diagrama de dispersión de rango vs duración, se observa que est
 Las clases Blanco y Rojo se encuentran encimadas en la gráfica de rango vs duración, debido a que presentan valores muy similares. Para mejorar la separación, se probarán otras características, como media vs energía y desviación estándar vs rango, con el objetivo de encontrar un par que permita distinguir mejor las tres clases.
 
 ### Avance del proyecto
-Se empezo con la creacion de las piezas a usar para empezar a darles un color especifico para mas muestreos y que solo se base en una solo calidad de color y tomar mas muestras en diferentes entornos para mayor adquisicion de datos para tener menor cantidad de errores al momento de una variacion. 
+Se empezo con la creacion de las piezas a usar para empezar a darles un color especifico para mas muestreos y que solo se base en una solo calidad de color y tomar mas muestras en diferentes entornos para mayor adquisicion de datos para tener menor cantidad de errores al momento de una variacion..
