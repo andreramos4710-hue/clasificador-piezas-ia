@@ -157,4 +157,18 @@ Al analizar el diagrama de dispersión de rango vs duración, se observa que est
 Las clases Blanco y Rojo se encuentran encimadas en la gráfica de rango vs duración, debido a que presentan valores muy similares. Para mejorar la separación, se probarán otras características, como media vs energía y desviación estándar vs rango, con el objetivo de encontrar un par que permita distinguir mejor las tres clases.
 
 ### Avance del proyecto
-Se empezo con la creacion de las piezas a usar para empezar a darles un color especifico para mas muestreos y que solo se base en una solo calidad de color y tomar mas muestras en diferentes entornos para mayor adquisicion de datos para tener menor cantidad de errores al momento de una variacion..
+Se empezo con la creacion de las piezas a usar para empezar a darles un color especifico para mas muestreos y que solo se base en una solo calidad de color y tomar mas muestras en diferentes entornos para mayor adquisicion de datos para tener menor cantidad de errores al momento de una variacion.
+
+### Semana 6 - Características en el dominio de la frecuencia (U2)
+### Antes de clase 
+### Bloque 1 
+
+- Tu frecuencia de muestreo (la que quedó en tu sensor.ino después de la semana 2)
+Mi frecuencia de muestreo es de 100 Hz, porque el sensor toma aproximadamente 100 muestras por segundo.
+- Tu frecuencia de Nyquist, y qué significa para tu señal.
+Mi frecuencia de Nyquist es de 50 Hz. Esto significa que solo puedo analizar correctamente frecuencias de hasta 50 Hz. Las frecuencias mayores pueden producir aliasing y aparecer como frecuencias falsas más bajas.
+- Tu resolución con el largo de ventana que usas. 
+Mi ventana tiene 200 muestras, por lo tanto:
+Δf = 100 Hz / 200 = 0.5 Hz. Esto significa que el espectro mostrará información cada 0.5 Hz. 
+- Tu predicción: ¿esperas que tus clases se distingan en frecuencia? ¿Por qué sí o por qué no?
+Espero que las clases blanco, rojo y negro puedan presentar diferencias en frecuencia, porque cada color produce una respuesta diferente en el TCR5000 y las variaciones de la señal pueden cambiar entre cada clase. Sin embargo, es posible que la diferencia principal esté en la intensidad de la señal y no tanto en su frecuencia.

@@ -73,3 +73,4 @@ archivo.close()
 ser.close()
 
 print(f"\nListo. Datos en {ARCHIVO}")
+.
