@@ -1,5 +1,5 @@
 # Bitácora del proyecto
-## Semana 1 - Encuadre y configuración del entorno
+## Semana 1 
 ### Antes de la clase
 Se descarga el programa que vamos a utilizar durante el semestre y se configuro el entorno, se configuro nustros repositorio, la busqueda de cosasa mas eficaz utilizando material adquirido, configurando entornos y todo lo que necesita
 
@@ -33,9 +33,11 @@ Este es el procedimiento para hacer push:
 - Luego git commit
 - Luego git push
 
-## Semana  2 la primera selñal del sensor 
-## Bloque 1
+
+## Semana  2 
 ### Antes de clase 
+#### Bloque 1
+
  1. Que sensor vas a usar y que tipo de salida tiene: usare el sensor tcrt5000 el cual va a ser para detectar el color de los objectos y es de una salida analogica
 
  2. Tres líneas de ejemplo tal como se van a ver saliendo de tu Arduino, con valores plausibles para tu caso. 
@@ -46,16 +48,15 @@ Este es el procedimiento para hacer push:
  3. Por qué el Arduino no puede mandar Serial.println("Leyendo...").
  El Arduino manda solo datos, nunca mensajes para humanos.
 
-## Bloque 2: leerlo desde Python, y a qué velocidad
-## Lectura del sensor TCR5000
+#### Bloque 2:
 
 Para esta práctica se utilizó un sensor TCR5000 mediante su salida analógica (AO), conectada a la entrada A0 del Arduino.
 
-### ¿Cuánto tarda la pieza en cruzar frente al sensor?
+1. ¿Cuánto tarda la pieza en cruzar frente al sensor?
 
 Se estima que la pieza tarda aproximadamente 0.5 segundos en cruzar frente al sensor TCR5000.
 
-### ¿Qué delay se necesita para tener al menos 20 muestras del evento?
+2. ¿Qué delay se necesita para tener al menos 20 muestras del evento?
 
 Se necesitan al menos 20 muestras durante los 0.5 segundos que tarda la pieza en pasar.
 
@@ -69,7 +70,7 @@ Por lo tanto:
 
 El delay máximo sería de 25 ms.
 
-### ¿Cuántas muestras da eso mientras la pieza pasa?
+3. ¿Cuántas muestras da eso mientras la pieza pasa?
 
 Con un delay de 20  se obtiene aproximadamente:
 
@@ -83,58 +84,61 @@ Por lo tanto, se obtienen aproximadamente 25 muestras mientras la pieza pasa fre
 
 Esto supera las 20 muestras mínimas solicitadas.
 
-### 4. Ajuste del delay en sensor.ino
+4. Ajuste del delay en sensor.ino
 el delay queda en 20 
 
 
-### Semana 3 - Recolección de datos etiquetados (U2)
-## Antes de clase 
-## Bloque 1 
+## Semana 3 
+### Antes de clase 
+#### Bloque 1 
 
-las columnas que son exactas de tu datos.csv, en el cual contene cada uno del nombre de cada unaa y que guarda:
+1. las columnas que son exactas de tu datos.csv, en el cual contene cada uno del nombre de cada unaa y que guarda:
 ventana,P,Valor,Tipo
 
-tus etiquetas, escritas tal cual como van a aparecer en el archivo:
+2. tus etiquetas, escritas tal cual como van a aparecer en el archivo:
 Rojo,Blanco,Negro
 
-cinco filas de ejemplo de tu tabla, con valores plausibles de tu sensor: 
+3. cinco filas de ejemplo de tu tabla, con valores plausibles de tu sensor: 
 523 blanco 
 410 rojo 
 85 negro 
 
-## Bloque 2
-- Cuántas ventanas por clase vas a capturar: 
+#### Bloque 2
+1. ¿Cuántas ventanas por clase vas a capturar?
 30 por cada una de las clases 
-- En qué orden: Blanco Rojo Negro 
-- Cómo vas a mantener pareja la velocidad de la mano, en concreto: voy a marcar una linea de 15 cm, y mi sensor va a estra ubicado en 5cm. 
-- A qué distancia del sensor va a pasar la pieza: aproximadamente a 3cm 
+2. ¿En qué orden? 
+Blanco Rojo Negro 
+3. ¿Cómo vas a mantener pareja la velocidad de la mano, en concreto? 
+voy a marcar una linea de 15 cm, y mi sensor va a estra ubicado en 5cm. 
+4. ¿A qué distancia del sensor va a pasar la pieza? 
+Aproximadamente a 3cm 
 
 ### Avance del proyecto
 difinir las databases que se van a usar en cada uno de nuestros sensores y marcando las etiquetas que cada uno va a usar. 
 
-### Semana 4 Limpieza y normalización de señales (U2)
+## Semana 4 
 ### Antes de clase 
-### bloque 1 
+#### bloque 1 
  
-- ¿Qué tipo de ruido ves en tu señal y de dónde crees que viene? 
+1. ¿Qué tipo de ruido ves en tu señal y de dónde crees que viene? 
 El sensor presentar pequeñas variaciones en las lecturas debido a interferencias eléctricas, cables,o cambios de luz del salon que interfieren en varias ocasiones. 
-- Qué rango físico tiene tu sensor y qué valores estás descartando por imposibles.
+2. ¿Qué rango físico tiene tu sensor y qué valores estás descartando por imposibles?
 El Arduino mide valores de 0 a 1023. Los valores fuera de este rango se consideran incorrectos y se eliminan.
-- Qué tamaño de filtro elegiste y por qué, en relación con la duración de tu evento.
+3. ¿Qué tamaño de filtro elegiste y por qué, en relación con la duración de tu evento?
 Se eligió un filtro de 5 muestras porque cada ventana tiene 200 muestras. Esto ayuda a reducir el ruido sin cambiar demasiado la señal.
 
-### Bloque 2
+#### Bloque 2
 
-- ¿Cuánto se movió tu línea base entre la primera y la última ventana de la sesión?
+1. ¿Cuánto se movió tu línea base entre la primera y la última ventana de la sesión?
 La línea base se calculó utilizando el promedio de las primeras 20 muestras de cada ventana. Al comparar la primera y la última ventana hubo una deriva en la señal.
-- ¿Qué normalización elegiste y por qué?
+2. ¿Qué normalización elegiste y por qué?
 Elegí la normalización Min-Max, porque las lecturas del sensor tienen un rango conocido y permite llevar los valores a un rango de 0 a 1, facilitando el procesamiento posterior del clasificador.
-- ¿Al comparar antes y después: ¿se parecen más entre sí las ventanas de una misma clase?
+3. ¿Al comparar antes y después: ¿se parecen más entre sí las ventanas de una misma clase?
 Después de corregir la línea base, las ventanas de una misma clase presentan formas más parecidas y comienzan cerca de un mismo nivel, ayudando a identificar las diferencias entre las piezas y no las variaciones. 
 
-### Semana 5 Características en el dominio del tiempo (U2)
+## Semana 5
 ### Antes de clase 
-### Bloque 1 
+#### Bloque 1 
 
 | Característica      | ¿Por qué debería distinguir mis clases?                             |
 | ------------------- | ------------------------------------------------------------------- |
@@ -147,28 +151,30 @@ Después de corregir la línea base, las ventanas de una misma clase presentan f
 
 Predicción: Creo que el mínimo será la característica más útil porque cada color puede reflejar diferente cantidad de luz. La duración podría ser la menos útil porque depende de la velocidad con la que pase la pieza frente al sensor.
 
-### Bloque 2
+#### Bloque 2
 
-- ¿Cuántas filas y cuántas columnas quedó tu features.csv, y por qué ese número de filas?
+1. ¿Cuántas filas y cuántas columnas quedó tu features.csv, y por qué ese número de filas?
 El archivo features.csv quedó con 90 filas y 9 columnas. Las 90 filas corresponden a las ventanas obtenidas de las tres clases: Blanco, Negro y Rojo, y las columnas corresponden a las características calculadas de cada ventana.
-- ¿Qué par de características separa mejor tus clases, con la gráfica que lo muestra?
+2. ¿Qué par de características separa mejor tus clases, con la gráfica que lo muestra?
 Al analizar el diagrama de dispersión de rango vs duración, se observa que estas características permiten diferenciar la clase Negro, pero no separan correctamente las clases Blanco y Rojo, ya que sus puntos se encuentran encimados. Por lo tanto, es necesario probar otros pares de características para encontrar una mejor separación entre las tres clases.
-- Si hay dos clases que se encimen, ¿cuáles y qué vas a hacer?
+3. ¿Si hay dos clases que se encimen, ¿cuáles y qué vas a hacer?
 Las clases Blanco y Rojo se encuentran encimadas en la gráfica de rango vs duración, debido a que presentan valores muy similares. Para mejorar la separación, se probarán otras características, como media vs energía y desviación estándar vs rango, con el objetivo de encontrar un par que permita distinguir mejor las tres clases.
 
 ### Avance del proyecto
 Se empezo con la creacion de las piezas a usar para empezar a darles un color especifico para mas muestreos y que solo se base en una solo calidad de color y tomar mas muestras en diferentes entornos para mayor adquisicion de datos para tener menor cantidad de errores al momento de una variacion.
 
-### Semana 6 - Características en el dominio de la frecuencia (U2)
+## Semana 6 
 ### Antes de clase 
-### Bloque 1 
+#### Bloque 1 
 
-- Tu frecuencia de muestreo (la que quedó en tu sensor.ino después de la semana 2)
+1. Tu frecuencia de muestreo (la que quedó en tu sensor.ino después de la semana 2)
 Mi frecuencia de muestreo es de 100 Hz, porque el sensor toma aproximadamente 100 muestras por segundo.
-- Tu frecuencia de Nyquist, y qué significa para tu señal.
+1. Tu frecuencia de Nyquist, y qué significa para tu señal.
 Mi frecuencia de Nyquist es de 50 Hz. Esto significa que solo puedo analizar correctamente frecuencias de hasta 50 Hz. Las frecuencias mayores pueden producir aliasing y aparecer como frecuencias falsas más bajas.
-- Tu resolución con el largo de ventana que usas. 
+1. Tu resolución con el largo de ventana que usas. 
 Mi ventana tiene 200 muestras, por lo tanto:
 Δf = 100 Hz / 200 = 0.5 Hz. Esto significa que el espectro mostrará información cada 0.5 Hz. 
-- Tu predicción: ¿esperas que tus clases se distingan en frecuencia? ¿Por qué sí o por qué no?
+1. Tu predicción: ¿esperas que tus clases se distingan en frecuencia? ¿Por qué sí o por qué no?
 Espero que las clases blanco, rojo y negro puedan presentar diferencias en frecuencia, porque cada color produce una respuesta diferente en el TCR5000 y las variaciones de la señal pueden cambiar entre cada clase. Sin embargo, es posible que la diferencia principal esté en la intensidad de la señal y no tanto en su frecuencia.
+
+#### Bloque 2
