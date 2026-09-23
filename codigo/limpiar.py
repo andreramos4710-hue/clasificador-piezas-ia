@@ -1,78 +1,248 @@
+# limpiar.py
+# Limpia los datos del sensor sin eliminar el nivel absoluto de cada color
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# 1. Definir la ruta raíz del proyecto
-RUTA_RAIZ = r'C:\Users\ramos\Downloads\7mo\Inteligencia Artificial\clasificador-piezas-ia'
 
-# Definir rutas completas
-ruta_entrada_csv = os.path.join(RUTA_RAIZ, 'datos', 'datos.csv')
-ruta_salida_csv = os.path.join(RUTA_RAIZ, 'datos', 'datos_limpios.csv')
-carpeta_figuras = os.path.join(RUTA_RAIZ, 'figuras')
-ruta_salida_figura = os.path.join(carpeta_figuras, 'limpieza.png')
+# ==========================================================
+# 1. RUTAS DEL PROYECTO
+# ==========================================================
 
-# 2. Leer datos
-datos = pd.read_csv(ruta_entrada_csv)
-
-# 3. Quitar valores fuera del rango del Arduino (0 a 1023)
-datos = datos[(datos['valor'] >= 0) & (datos['valor'] <= 1023)].copy()
-
-# 4. Aplicar filtro de media móvil dentro de cada ventana
-datos['valor_filtrado'] = datos.groupby('ventana')['valor'].transform(
-    lambda x: x.rolling(window=5, center=True, min_periods=1).mean()
+# Detecta automáticamente la carpeta raíz del proyecto
+RUTA_RAIZ = os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))
 )
 
-# 5. Rellenar los NaN de las orillas producidos por el filtro
-datos['valor_filtrado'] = datos.groupby('ventana')['valor_filtrado'].transform(
-    lambda x: x.bfill().ffill()
+ruta_entrada_csv = os.path.join(
+    RUTA_RAIZ,
+    'datos',
+    'datos.csv'
 )
 
-# 6. Calcular la línea base
-base = datos[datos['p'] < 20].groupby('ventana')['valor_filtrado'].mean()
-base = base.fillna(datos.groupby('ventana')['valor_filtrado'].mean())
+ruta_salida_csv = os.path.join(
+    RUTA_RAIZ,
+    'datos',
+    'datos_limpios.csv'
+)
 
-# 7. Restar la línea base a cada ventana
-datos['valor_corregido'] = datos['valor_filtrado'] - datos['ventana'].map(base)
+carpeta_figuras = os.path.join(
+    RUTA_RAIZ,
+    'figuras'
+)
 
-# 8. Normalizar Min-Max (evitando la división entre cero)
-minimo = datos['valor_corregido'].min()
-maximo = datos['valor_corregido'].max()
+ruta_salida_figura = os.path.join(
+    carpeta_figuras,
+    'limpieza.png'
+)
 
-if maximo != minimo:
-    datos['valor_normalizado'] = (
-        datos['valor_corregido'] - minimo
-    ) / (maximo - minimo)
-else:
-    datos['valor_normalizado'] = 0.0
-
-# 9. Crear carpeta de figuras si no existe
+# Crear carpeta figuras si no existe
 os.makedirs(carpeta_figuras, exist_ok=True)
 
-# Guardar imagen de ejemplo
-ventana = datos['ventana'].iloc[0]
-ejemplo = datos[datos['ventana'] == ventana]
 
-plt.figure(figsize=(10, 5))
-plt.plot(ejemplo['p'], ejemplo['valor'], label='Antes')
-plt.plot(ejemplo['p'], ejemplo['valor_corregido'], label='Después')
+# ==========================================================
+# 2. LEER LOS DATOS
+# ==========================================================
 
-plt.xlabel('Tiempo / Muestra (p)')
-plt.ylabel('Valor')
-plt.title('Comparación antes y después de la limpieza')
-plt.legend()
-plt.grid()
+datos = pd.read_csv(ruta_entrada_csv)
 
-plt.savefig(ruta_salida_figura)
-plt.close()
+print("\nDatos cargados correctamente.")
+print("Cantidad de muestras originales:", len(datos))
 
-# 10. Guardar dataset limpio
-datos_limpios = datos[
-    ['ventana', 'p', 'valor_normalizado', 'tipo']
+print("\nPrimeras filas:")
+print(datos.head())
+
+
+# ==========================================================
+# 3. COMPROBAR COLUMNAS
+# ==========================================================
+
+columnas_necesarias = [
+    'ventana',
+    'p',
+    'valor',
+    'etiqueta'
 ]
 
-datos_limpios.to_csv(ruta_salida_csv, index=False)
+for columna in columnas_necesarias:
 
-# 11. Mostrar resultados
-print('Proceso terminado.')
-print(f'Archivo creado: {ruta_salida_csv}')
-print(f'Figura creada: {ruta_salida_figura}')
+    if columna not in datos.columns:
+
+        raise ValueError(
+            f'ERROR: No existe la columna "{columna}" '
+            'en datos.csv'
+        )
+
+
+# ==========================================================
+# 4. CONVERTIR VALOR A NÚMERO
+# ==========================================================
+
+datos['valor'] = pd.to_numeric(
+    datos['valor'],
+    errors='coerce'
+)
+
+# Eliminar filas donde valor no sea válido
+datos = datos.dropna(subset=['valor']).copy()
+
+
+# ==========================================================
+# 5. ELIMINAR VALORES FUERA DEL RANGO DEL ARDUINO
+# ==========================================================
+
+datos = datos[
+    (datos['valor'] >= 0) &
+    (datos['valor'] <= 1023)
+].copy()
+
+print(
+    "Cantidad de muestras después del filtro de rango:",
+    len(datos)
+)
+
+
+# ==========================================================
+# 6. FILTRO DE MEDIA MÓVIL
+# ==========================================================
+
+# Suaviza pequeñas variaciones de ruido.
+# IMPORTANTE:
+# No se resta la línea base porque necesitamos conservar
+# el nivel absoluto que diferencia Negro, Rojo y Blanco.
+
+datos['valor_filtrado'] = (
+    datos
+    .groupby('ventana')['valor']
+    .transform(
+        lambda x: x.rolling(
+            window=5,
+            center=True,
+            min_periods=1
+        ).mean()
+    )
+)
+
+
+# ==========================================================
+# 7. CONSERVAR EL NIVEL ABSOLUTO
+# ==========================================================
+
+# Usaremos el valor filtrado como señal limpia.
+# NO hacemos corrección de línea base por ventana.
+
+datos['valor_limpio'] = datos['valor_filtrado']
+
+
+# ==========================================================
+# 8. COMPROBAR MUESTRAS POR VENTANA
+# ==========================================================
+
+muestras_por_ventana = (
+    datos.groupby('ventana')
+    .size()
+)
+
+print("\nMuestras por ventana:")
+print(muestras_por_ventana)
+
+ventanas_incompletas = muestras_por_ventana[
+    muestras_por_ventana != 200
+]
+
+if len(ventanas_incompletas) > 0:
+
+    print("\nADVERTENCIA:")
+    print("Estas ventanas no tienen 200 muestras:")
+
+    print(ventanas_incompletas)
+
+else:
+
+    print(
+        "\nTodas las ventanas tienen "
+        "200 muestras correctamente."
+    )
+
+
+# ==========================================================
+# 9. MOSTRAR PROMEDIO POR COLOR
+# ==========================================================
+
+promedios = (
+    datos
+    .groupby('etiqueta')['valor_limpio']
+    .mean()
+)
+
+print("\nPromedio del sensor por color:")
+print(promedios)
+
+
+# ==========================================================
+# 10. GUARDAR DATOS LIMPIOS
+# ==========================================================
+
+datos.to_csv(
+    ruta_salida_csv,
+    index=False
+)
+
+print(
+    "\nDatos limpios guardados en:",
+    ruta_salida_csv
+)
+
+
+# ==========================================================
+# 11. CREAR GRÁFICA
+# ==========================================================
+
+plt.figure(figsize=(10, 5))
+
+# Mostrar una ventana de ejemplo
+ventana_ejemplo = datos['ventana'].iloc[0]
+
+ejemplo = datos[
+    datos['ventana'] == ventana_ejemplo
+]
+
+plt.plot(
+    ejemplo['p'],
+    ejemplo['valor'],
+    label='Original',
+    alpha=0.6
+)
+
+plt.plot(
+    ejemplo['p'],
+    ejemplo['valor_limpio'],
+    label='Filtrada',
+    linewidth=2
+)
+
+plt.xlabel('Número de muestra')
+plt.ylabel('Valor del sensor')
+plt.title(
+    f'Limpieza de señal - Ventana {ventana_ejemplo}'
+)
+
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+
+plt.savefig(
+    ruta_salida_figura,
+    dpi=300
+)
+
+plt.close()
+
+print(
+    "Gráfica guardada en:",
+    ruta_salida_figura
+)
+
+print("\nProceso de limpieza terminado correctamente.")

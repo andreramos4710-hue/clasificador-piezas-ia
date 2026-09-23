@@ -1,76 +1,208 @@
-
-# adquirir.py - captura ventanas etiquetadas y las guarda en datos/datos.csv
+# adquirir.py
+# Captura ventanas etiquetadas y las guarda en datos/datos.csv
 
 import serial
 import time
 import csv
 import os
-import pandas as pd
+
+
+# ==========================================================
+# 1. CONFIGURACIÓN
+# ==========================================================
 
 PUERTO = 'COM3'
-BAUDIOS = 9600
+BAUDIOS = 115200
 N_MUESTRAS = 200
-ARCHIVO = 'datos/datos.csv'
 
-etiqueta = input("Etiqueta de esta pieza: ")
-n_ventanas = int(input("Cuantas ventanas vas a capturar: "))
+
+# ==========================================================
+# 2. RUTAS DEL PROYECTO
+# ==========================================================
+
+# Detecta automáticamente la carpeta raíz del proyecto
+# adquirir.py está dentro de la carpeta "codigo"
+RUTA_RAIZ = os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))
+)
+
+CARPETA_DATOS = os.path.join(
+    RUTA_RAIZ,
+    'datos'
+)
+
+ARCHIVO = os.path.join(
+    CARPETA_DATOS,
+    'datos.csv'
+)
 
 # Crear carpeta datos si no existe
-os.makedirs('datos', exist_ok=True)
+os.makedirs(CARPETA_DATOS, exist_ok=True)
 
-ser = serial.Serial(PUERTO, BAUDIOS, timeout=1)
+
+# ==========================================================
+# 3. PEDIR INFORMACIÓN DE LA CAPTURA
+# ==========================================================
+
+etiqueta = input(
+    "Etiqueta de esta pieza (Negro/Rojo/Blanco): "
+).strip()
+
+n_ventanas = int(
+    input("Cuantas ventanas vas a capturar: ")
+)
+
+
+# ==========================================================
+# 4. CONECTAR CON ARDUINO
+# ==========================================================
+
+print(f"\nConectando con Arduino en {PUERTO}...")
+
+ser = serial.Serial(
+    PUERTO,
+    BAUDIOS,
+    timeout=1
+)
+
 time.sleep(2)
 
-# 'a' = append: no borra los datos anteriores
-archivo = open(ARCHIVO, 'a', newline='')
-escritor = csv.writer(archivo)
+print("Arduino conectado correctamente.")
 
-# TODO 1 RESUELTO:
-# Si el archivo está vacío, escribir los encabezados
-if os.path.getsize(ARCHIVO) == 0:
-    escritor.writerow(['ventana', 't', 'valor', 'etiqueta'])
-    archivo.flush()
 
-# TODO 2 RESUELTO:
-# Leer el CSV y continuar desde la siguiente ventana
-if os.path.getsize(ARCHIVO) > 0:
-    datos = pd.read_csv(ARCHIVO)
+# ==========================================================
+# 5. BUSCAR EL NÚMERO DE LA SIGUIENTE VENTANA
+# ==========================================================
 
-    if not datos.empty:
-        ventana = int(datos['ventana'].max()) + 1
-    else:
-        ventana = 0
-else:
-    ventana = 0
+ventana = 0
 
-for i in range(n_ventanas):
+if os.path.exists(ARCHIVO) and os.path.getsize(ARCHIVO) > 0:
 
-    input(f"\nVentana {ventana} ({etiqueta}). Enter y pasa la pieza...")
+    with open(
+        ARCHIVO,
+        'r',
+        newline='',
+        encoding='utf-8'
+    ) as archivo_lectura:
 
-    ser.reset_input_buffer()
+        lector = csv.DictReader(archivo_lectura)
 
-    t = 0
+        ventanas = []
 
-    while t < N_MUESTRAS:
+        for fila in lector:
 
-        linea = ser.readline().decode('utf-8').strip()
+            try:
+                ventanas.append(
+                    int(fila['ventana'])
+                )
 
-        try:
-            valor = float(linea)
-        except ValueError:
-            continue
+            except (ValueError, KeyError):
+                pass
 
-        escritor.writerow([ventana, t, valor, etiqueta])
-        t += 1
+        if ventanas:
+            ventana = max(ventanas) + 1
 
-    archivo.flush()
 
-    print(f"  {N_MUESTRAS} muestras guardadas")
+# ==========================================================
+# 6. ABRIR ARCHIVO CSV
+# ==========================================================
 
-    ventana += 1
+archivo_nuevo = (
+    not os.path.exists(ARCHIVO)
+    or os.path.getsize(ARCHIVO) == 0
+)
 
-archivo.close()
+with open(
+    ARCHIVO,
+    'a',
+    newline='',
+    encoding='utf-8'
+) as archivo:
+
+    escritor = csv.writer(archivo)
+
+    # Crear encabezado
+    if archivo_nuevo:
+
+        escritor.writerow([
+            'ventana',
+            'p',
+            'valor',
+            'etiqueta'
+        ])
+
+        archivo.flush()
+
+
+    # ======================================================
+    # 7. CAPTURAR VENTANAS
+    # ======================================================
+
+    for i in range(n_ventanas):
+
+        input(
+            f"\nVentana {ventana} ({etiqueta}). "
+            "Presiona Enter para comenzar..."
+        )
+
+        # Limpiar datos anteriores del puerto serial
+        ser.reset_input_buffer()
+
+        p = 0
+
+        print("Capturando...")
+
+        while p < N_MUESTRAS:
+
+            linea = ser.readline().decode(
+                'utf-8',
+                errors='ignore'
+            ).strip()
+
+            # Ignorar líneas vacías
+            if linea == '':
+                continue
+
+            try:
+                valor = float(linea)
+
+            except ValueError:
+                continue
+
+            escritor.writerow([
+                ventana,
+                p,
+                valor,
+                etiqueta
+            ])
+
+            p += 1
+
+        archivo.flush()
+
+        print(
+            f"Ventana {ventana}: "
+            f"{N_MUESTRAS} muestras guardadas correctamente."
+        )
+
+        ventana += 1
+
+
+# ==========================================================
+# 8. CERRAR ARDUINO
+# ==========================================================
+
 ser.close()
 
-print(f"\nListo. Datos en {ARCHIVO}")
-.
+
+# ==========================================================
+# 9. RESULTADO
+# ==========================================================
+
+print("\nCaptura terminada correctamente.")
+
+print(
+    "Datos guardados en:"
+)
+
+print(ARCHIVO)
