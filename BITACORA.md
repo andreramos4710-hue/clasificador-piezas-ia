@@ -169,12 +169,19 @@ Se empezo con la creacion de las piezas a usar para empezar a darles un color es
 
 1. Tu frecuencia de muestreo (la que quedó en tu sensor.ino después de la semana 2)
 Mi frecuencia de muestreo es de 100 Hz, porque el sensor toma aproximadamente 100 muestras por segundo.
-1. Tu frecuencia de Nyquist, y qué significa para tu señal.
+2. Tu frecuencia de Nyquist, y qué significa para tu señal.
 Mi frecuencia de Nyquist es de 50 Hz. Esto significa que solo puedo analizar correctamente frecuencias de hasta 50 Hz. Las frecuencias mayores pueden producir aliasing y aparecer como frecuencias falsas más bajas.
-1. Tu resolución con el largo de ventana que usas. 
+3. Tu resolución con el largo de ventana que usas. 
 Mi ventana tiene 200 muestras, por lo tanto:
 Δf = 100 Hz / 200 = 0.5 Hz. Esto significa que el espectro mostrará información cada 0.5 Hz. 
-1. Tu predicción: ¿esperas que tus clases se distingan en frecuencia? ¿Por qué sí o por qué no?
+4. Tu predicción: ¿esperas que tus clases se distingan en frecuencia? ¿Por qué sí o por qué no?
 Espero que las clases blanco, rojo y negro puedan presentar diferencias en frecuencia, porque cada color produce una respuesta diferente en el TCR5000 y las variaciones de la señal pueden cambiar entre cada clase. Sin embargo, es posible que la diferencia principal esté en la intensidad de la señal y no tanto en su frecuencia.
 
 #### Bloque 2
+
+1. ¿Qué frecuencia dominante tiene tu señal y tiene sentido físico?
+La frecuencia dominante de la señal analizada es aproximadamente 4.5 Hz. Esto representa una de las variaciones principales que detectó el sensor TCR5000 y puede relacionarse con cambios en la lectura durante la medición.
+2. ¿Las características de frecuencia permiten distinguir entre blanco, rojo y negro?
+Por el momento no es posible determinarlo, ya que las gráficas solamente muestran datos correspondientes al color negro. Es necesario analizar muestras de los otros dos colores para realizar una comparación.
+3. ¿Conviene conservar las características espectrales o eliminarlas? ¿Por qué?
+Por ahora conviene conservarlas para continuar el análisis. Una vez que se tengan muestras de los tres colores, se podrá determinar si estas características ayudan a diferenciarlos o si es mejor eliminarlas.

@@ -1,8 +1,10 @@
 
-# limpiar.py
-# Limpia las lecturas del sensor sin eliminar el nivel absoluto de cada color.
+# features.py
+# Extraccion de caracteristicas temporales y espectrales
+# Proyecto de clasificacion de colores con sensor TCR5000
 
 import os
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -10,207 +12,315 @@ import matplotlib.pyplot as plt
 # 1. RUTAS DEL PROYECTO
 # ==========================================================
 
-# Este archivo está dentro de /codigo.
-# Subimos una carpeta para llegar a la raíz del repositorio.
-RUTA_RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+RUTA_RAIZ = os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))
+)
 
-ruta_entrada_csv = os.path.join(RUTA_RAIZ, "datos", "datos.csv")
-ruta_salida_csv = os.path.join(RUTA_RAIZ, "datos", "datos_limpios.csv")
+ruta_entrada = os.path.join(
+    RUTA_RAIZ, "datos", "datos_limpios.csv"
+)
+
+ruta_salida = os.path.join(
+    RUTA_RAIZ, "datos", "features.csv"
+)
+
 carpeta_figuras = os.path.join(RUTA_RAIZ, "figuras")
-ruta_salida_figura = os.path.join(carpeta_figuras, "limpieza.png")
 
-# Crear las carpetas por si todavía no existen
-os.makedirs(os.path.join(RUTA_RAIZ, "datos"), exist_ok=True)
 os.makedirs(carpeta_figuras, exist_ok=True)
 
-print("Ruta raíz del proyecto:")
-print(RUTA_RAIZ)
+ruta_espectro = os.path.join(
+    carpeta_figuras, "espectro.png"
+)
 
-print("\nLeyendo archivo:")
-print(ruta_entrada_csv)
+ruta_features = os.path.join(
+    carpeta_figuras, "features.png"
+)
 
 # ==========================================================
-# 2. LEER DATOS
+# 2. CONFIGURACION
 # ==========================================================
 
-if not os.path.exists(ruta_entrada_csv):
+FS = 100.0          # Frecuencia de muestreo en Hz
+UMBRAL = 50         # Umbral para duracion del evento
+
+# ==========================================================
+# 3. LEER LOS DATOS LIMPIOS
+# ==========================================================
+
+if not os.path.exists(ruta_entrada):
     raise FileNotFoundError(
-        f"\nNo se encontró el archivo:\n{ruta_entrada_csv}\n"
-        "Primero ejecuta adquirir.py para generar datos.csv."
+        "No se encontro datos_limpios.csv. "
+        "Primero ejecuta limpiar.py."
     )
 
-datos = pd.read_csv(ruta_entrada_csv)
+datos = pd.read_csv(ruta_entrada)
 
-print("\nColumnas encontradas:")
-print(datos.columns.tolist())
+# Aceptar los nombres usados en versiones anteriores
+if "tipo" in datos.columns:
+    columna_clase = "tipo"
+elif "etiqueta" in datos.columns:
+    columna_clase = "etiqueta"
+else:
+    raise ValueError(
+        "No existe la columna tipo o etiqueta."
+    )
+
+if "valor_limpio" in datos.columns:
+    columna_senal = "valor_limpio"
+elif "valor_filtrado" in datos.columns:
+    columna_senal = "valor_filtrado"
+else:
+    raise ValueError(
+        "No existe valor_limpio ni valor_filtrado."
+    )
+
+if "ventana" not in datos.columns:
+    raise ValueError("Falta la columna ventana.")
+
+datos[columna_senal] = pd.to_numeric(
+    datos[columna_senal], errors="coerce"
+)
+
+datos = datos.dropna(
+    subset=["ventana", columna_clase, columna_senal]
+).copy()
+
+if datos.empty:
+    raise ValueError("No hay lecturas validas.")
+
+print("\nDatos cargados correctamente.")
+print("Cantidad de muestras:", len(datos))
 
 # ==========================================================
-# 3. COMPROBAR COLUMNAS
+# 4. EXTRAER CARACTERISTICAS POR VENTANA
 # ==========================================================
 
-columnas_necesarias = ["ventana", "t", "valor", "tipo"]
+filas = []
+espectros_ejemplo = {}
 
-for columna in columnas_necesarias:
-    if columna not in datos.columns:
-        raise ValueError(
-            f'Falta la columna "{columna}" en datos.csv.\n'
-            f"Columnas disponibles: {datos.columns.tolist()}"
+for ventana, grupo in datos.groupby("ventana", sort=False):
+
+    # Mantener las muestras en orden de captura
+    if "t" in grupo.columns:
+        grupo = grupo.sort_values("t")
+    elif "p" in grupo.columns:
+        grupo = grupo.sort_values("p")
+
+    x = grupo[columna_senal].to_numpy(dtype=float)
+    etiqueta = str(grupo[columna_clase].iloc[0]).strip()
+
+    if len(x) < 2:
+        print("Ventana omitida:", ventana)
+        continue
+
+    # ------------------------------------------------------
+    # 5. CARACTERISTICAS EN EL TIEMPO
+    # ------------------------------------------------------
+
+    media = np.mean(x)
+    desviacion = np.std(x)
+    minimo = np.min(x)
+    maximo = np.max(x)
+    rango = maximo - minimo
+    energia = np.sum(x ** 2)
+
+    # Duracion aproximada del evento
+    duracion = np.sum(
+        np.abs(x - media) > UMBRAL
+    )
+
+    fila = {
+        "ventana": ventana,
+        "media": media,
+        "desv": desviacion,
+        "minimo": minimo,
+        "maximo": maximo,
+        "rango": rango,
+        "energia": energia,
+        "duracion": duracion,
+    }
+
+    # ------------------------------------------------------
+    # 6. TRANSFORMADA RAPIDA DE FOURIER (FFT)
+    # ------------------------------------------------------
+
+    # Eliminar el promedio solamente para analizar
+    # las oscilaciones. No afecta las features temporales.
+    x_fft = x - media
+
+    espectro = np.abs(np.fft.rfft(x_fft))
+
+    frecuencias = np.fft.rfftfreq(
+        len(x_fft), d=1 / FS
+    )
+
+    # Quitar componente de 0 Hz
+    espectro = espectro[1:]
+    frecuencias = frecuencias[1:]
+
+    # ------------------------------------------------------
+    # 7. CARACTERISTICAS ESPECTRALES
+    # ------------------------------------------------------
+
+    energia_espectral = np.sum(espectro ** 2)
+
+    if np.sum(espectro) > 1e-12:
+
+        f_dominante = frecuencias[
+            np.argmax(espectro)
+        ]
+
+        centroide = (
+            np.sum(frecuencias * espectro)
+            / np.sum(espectro)
         )
 
-# Convertir valor a número.
-# Si existe algún dato incorrecto, se convierte en NaN.
-datos["valor"] = pd.to_numeric(datos["valor"], errors="coerce")
+    else:
+        # Senal constante, sin oscilaciones medibles
+        f_dominante = 0.0
+        centroide = 0.0
 
-# Eliminar filas donde no exista una lectura válida
-datos = datos.dropna(subset=["valor"]).copy()
+    # Energia por bandas
+    banda_baja = np.sum(
+        espectro[
+            (frecuencias > 0) & (frecuencias < 10)
+        ] ** 2
+    )
 
-if datos.empty:
+    banda_media = np.sum(
+        espectro[
+            (frecuencias >= 10) & (frecuencias < 25)
+        ] ** 2
+    )
+
+    banda_alta = np.sum(
+        espectro[
+            (frecuencias >= 25) & (frecuencias <= 50)
+        ] ** 2
+    )
+
+    fila["f_dominante"] = f_dominante
+    fila["energia_espectral"] = energia_espectral
+    fila["centroide"] = centroide
+    fila["banda_baja"] = banda_baja
+    fila["banda_media"] = banda_media
+    fila["banda_alta"] = banda_alta
+
+    fila["tipo"] = etiqueta
+
+    filas.append(fila)
+
+    # Guardar un espectro de ejemplo por color
+    clave = etiqueta.lower()
+
+    if clave not in espectros_ejemplo:
+        espectros_ejemplo[clave] = (
+            frecuencias.copy(),
+            espectro.copy()
+        )
+
+# ==========================================================
+# 8. GUARDAR FEATURES.CSV
+# ==========================================================
+
+if not filas:
     raise ValueError(
-        '\nERROR: La columna "valor" está vacía.\n'
-        "Revisa adquirir.py y verifica que Arduino esté enviando "
-        "las lecturas del TCR5000."
+        "No se pudieron extraer caracteristicas."
     )
 
-# ==========================================================
-# 4. ELIMINAR VALORES FUERA DEL RANGO DEL ADC
-# ==========================================================
+features = pd.DataFrame(filas)
 
-datos = datos[
-    (datos["valor"] >= 0) &
-    (datos["valor"] <= 1023)
-].copy()
+features.to_csv(ruta_salida, index=False)
 
-if datos.empty:
-    raise ValueError(
-        "\nERROR: No quedaron datos después del filtrado.\n"
-        'Revisa los valores de la columna "valor" en datos.csv.'
-    )
-
-# ==========================================================
-# 5. FILTRO DE MEDIA MÓVIL
-# ==========================================================
-
-# Suavizamos pequeñas variaciones/ruido del sensor.
-# NO restamos la línea base porque necesitamos conservar
-# el nivel absoluto que diferencia Negro, Rojo y Blanco.
-
-datos["valor_filtrado"] = (
-    datos.groupby("ventana")["valor"]
-    .transform(
-        lambda x: x.rolling(
-            window=5,
-            center=True,
-            min_periods=1
-        ).mean()
-    )
-)
-
-# ==========================================================
-# 6. CONSERVAR EL NIVEL ABSOLUTO
-# ==========================================================
-
-# Esta será la señal utilizada posteriormente en features.py.
-# Conservamos el nivel real de reflectancia de cada color.
-
-datos["valor_limpio"] = datos["valor_filtrado"]
-
-# ==========================================================
-# 7. GUARDAR DATOS LIMPIOS
-# ==========================================================
-
-datos.to_csv(ruta_salida_csv, index=False)
-
-print("\nDatos limpios guardados correctamente en:")
-print(ruta_salida_csv)
-
-# ==========================================================
-# 8. MOSTRAR CANTIDAD DE VENTANAS POR CLASE
-# ==========================================================
+print("\nCaracteristicas guardadas correctamente:")
+print(ruta_salida)
 
 print("\nCantidad de ventanas por clase:")
+print(features["tipo"].value_counts())
 
-ventanas_por_clase = (
-    datos[["ventana", "tipo"]]
-    .drop_duplicates()
-    ["tipo"]
-    .value_counts()
-)
-
-print(ventanas_por_clase)
-
-print("\nCantidad total de ventanas:")
-print(datos["ventana"].nunique())
+print("\nPrimeras filas:")
+print(features.head())
 
 # ==========================================================
-# 9. MOSTRAR CANTIDAD DE MUESTRAS POR VENTANA
+# 9. GRAFICA DE ESPECTROS POR COLOR
 # ==========================================================
-
-print("\nCantidad de muestras por ventana:")
-
-muestras_por_ventana = datos.groupby("ventana").size()
-
-print(muestras_por_ventana)
-
-# Advertencia si alguna ventana no tiene aproximadamente 200 muestras
-ventanas_incompletas = muestras_por_ventana[muestras_por_ventana < 200]
-
-if not ventanas_incompletas.empty:
-    print("\nADVERTENCIA:")
-    print(
-        "Hay ventanas con menos de 200 muestras. "
-        "Las nuevas capturas deben tener 200 muestras por ventana."
-    )
-
-# ==========================================================
-# 10. GRAFICAR UNA VENTANA
-# ==========================================================
-
-primera_ventana = datos["ventana"].iloc[0]
-
-ejemplo = datos[
-    datos["ventana"] == primera_ventana
-].copy()
 
 plt.figure(figsize=(10, 5))
 
-plt.plot(
-    ejemplo["t"],
-    ejemplo["valor"],
-    label="Original",
-    alpha=0.6
-)
+colores = {
+    "blanco": "royalblue",
+    "rojo": "red",
+    "negro": "black"
+}
 
-plt.plot(
-    ejemplo["t"],
-    ejemplo["valor_filtrado"],
-    label="Filtrada",
-    linewidth=2
-)
+for clase, (frecuencias, espectro) in (
+    espectros_ejemplo.items()
+):
 
-tipo_ejemplo = ejemplo["tipo"].iloc[0]
+    plt.plot(
+        frecuencias,
+        espectro,
+        label=clase.capitalize(),
+        color=colores.get(clase, None)
+    )
 
-plt.title(
-    f"Ventana {primera_ventana} - {tipo_ejemplo}"
-)
-
-plt.xlabel("Muestra")
-plt.ylabel("Valor ADC")
-plt.legend()
+plt.title("Espectro FFT por clase - TCR5000")
+plt.xlabel("Frecuencia (Hz)")
+plt.ylabel("Magnitud FFT")
 plt.grid(True)
+plt.legend()
 plt.tight_layout()
 
-plt.savefig(
-    ruta_salida_figura,
-    dpi=300
-)
-
+plt.savefig(ruta_espectro, dpi=300)
 plt.close()
 
-print("\nGráfica guardada correctamente en:")
-print(ruta_salida_figura)
+print("\nGrafica espectral guardada:")
+print(ruta_espectro)
 
 # ==========================================================
-# 11. FINAL
+# 10. COMPARACION DE CARACTERISTICAS
 # ==========================================================
 
-print("\nProceso de limpieza terminado correctamente.")
+plt.figure(figsize=(9, 6))
+
+for clase, grupo in features.groupby("tipo"):
+
+    plt.scatter(
+        grupo["media"],
+        grupo["centroide"],
+        label=clase,
+        alpha=0.7,
+        color=colores.get(str(clase).lower(), None)
+    )
+
+plt.xlabel("Media del sensor (ADC)")
+plt.ylabel("Centroide espectral (Hz)")
+plt.title("Comparacion de caracteristicas por color")
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+
+plt.savefig(ruta_features, dpi=300)
+plt.close()
+
+print("\nGrafica de caracteristicas guardada:")
+print(ruta_features)
+
+# ==========================================================
+# 11. RESULTADOS
+# ==========================================================
+
+print("\nPromedio de caracteristicas por clase:")
+
+columnas = [
+    "media",
+    "f_dominante",
+    "centroide",
+    "energia_espectral"
+]
+
+print(
+    features.groupby("tipo")[columnas].mean()
+)
+
+print("\nProceso terminado correctamente.")
