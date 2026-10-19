@@ -185,3 +185,28 @@ La frecuencia dominante de la señal analizada es aproximadamente 4.5 Hz. Esto r
 Por el momento no es posible determinarlo, ya que las gráficas solamente muestran datos correspondientes al color negro. Es necesario analizar muestras de los otros dos colores para realizar una comparación.
 3. ¿Conviene conservar las características espectrales o eliminarlas? ¿Por qué?
 Por ahora conviene conservarlas para continuar el análisis. Una vez que se tengan muestras de los tres colores, se podrá determinar si estas características ayudan a diferenciarlos o si es mejor eliminarlas.
+
+## Semana 7
+### Antes de clase 
+#### Bloque 1 
+
+1. ¿Con cuántos ejemplos vas a entrenar y con cuántos a probar?
+Actualmente cuento con una ventana de datos correspondiente al color negro. Por el momento no es posible dividir los datos en entrenamiento y prueba, ya que necesito más muestras de los tres colores.
+Mi objetivo es recolectar 90 ventanas, distribuidas en 30 de color negro, 30 de rojo y 30 de blanco. Una vez completadas, utilizaré 72 ventanas para entrenamiento (80%) y 18 para prueba (20%).
+2. ¿Qué algoritmo eliges para empezar y por qué?
+Elegiré el algoritmo de árbol de decisión porque permite clasificar las piezas mediante las características obtenidas del sensor TCR5000. Además, es fácil de interpretar, no requiere estandarizar los datos y permite identificar las reglas que utiliza para diferenciar los colores negro, rojo y blanco.
+3. ¿Por qué un modelo que acierta el 100% en entrenamiento puede ser inútil?
+Porque puede memorizar los datos de entrenamiento sin aprender a identificar correctamente piezas nuevas. Aunque obtenga un 100% de aciertos con los datos que ya conoce, puede equivocarse cuando se le presenten muestras diferentes. Por eso es importante evaluar el modelo con datos que no haya utilizado durante el entrenamiento.
+
+#### Bloque 2
+
+1. ¿Cuál fue tu exactitud en el conjunto de prueba?
+Por el momento no se obtuvo un porcentaje de exactitud, debido a que solamente cuento con una ventana correspondiente al color negro. Es necesario completar la recolección de datos para entrenar y evaluar correctamente el modelo.
+2. ¿Qué par de clases se confunde más?
+Todavía no es posible identificar qué colores presentan mayor confusión, ya que se necesitan muestras de blanco, rojo y negro para generar la matriz de confusión y analizar las predicciones del clasificador.
+3. ¿El resultado coincidió con lo que predijiste en la semana 6?
+Durante las prácticas anteriores se observaron diferencias en los valores registrados por el sensor TCR5000 para los distintos colores. Por ello, se espera que el clasificador pueda diferenciarlos. Sin embargo, todavía no es posible comprobar esta predicción porque faltan muestras para realizar el entrenamiento.
+
+## Semana 8
+### Antes de clase 
+#### Bloque 1 
