@@ -13,7 +13,7 @@ const int PIN_TCR5000 = A0;
 
 void setup() {
   // Comunicación con Python
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   // Pequeña pausa para estabilizar el sensor
   delay(500);
@@ -30,5 +30,5 @@ void loop() {
   Serial.println(valor);
 
   // 10 ms = aproximadamente 100 muestras por segundo
-  delay(10);
+  delay(20);
 }

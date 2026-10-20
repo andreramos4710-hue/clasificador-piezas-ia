@@ -136,6 +136,17 @@ Elegí la normalización Min-Max, porque las lecturas del sensor tienen un rango
 3. ¿Al comparar antes y después: ¿se parecen más entre sí las ventanas de una misma clase?
 Después de corregir la línea base, las ventanas de una misma clase presentan formas más parecidas y comienzan cerca de un mismo nivel, ayudando a identificar las diferencias entre las piezas y no las variaciones. 
 
+### Avance del proyecto
+
+### Avance del proyecto
+
+1. ¿Qué le hiciste a tu señal, en orden, y por qué en ese orden?
+Primero se revisaron los datos obtenidos del sensor TCR5000 para eliminar valores inválidos. Después se aplicó un filtro de media móvil para reducir el ruido de las mediciones. Finalmente, se conservaron los valores de intensidad de cada color para mantener las diferencias entre blanco, rojo y negro, generando el archivo `datos_limpios.csv`.
+2. ¿Qué tanto se parecen entre sí las ventanas de una misma clase después de limpiar, comparado con antes?**
+Después de aplicar la limpieza, las señales de un mismo color presentan un comportamiento más uniforme y con menos variaciones de ruido. En comparación con las señales originales, las ventanas deberían mostrar mayor estabilidad, facilitando la identificación de las características de cada color.
+3. Si dos de tus clases se traslapan, ¿qué vas a hacer al respecto?
+Si las señales de dos colores presentan valores similares, se pueden revisar las condiciones de medición, como la iluminación y la distancia entre el sensor y la superficie. También se pueden capturar nuevas muestras y utilizar características temporales y espectrales para mejorar la clasificación de los colores.
+
 ## Semana 5
 ### Antes de clase 
 #### Bloque 1 
@@ -163,6 +174,17 @@ Las clases Blanco y Rojo se encuentran encimadas en la gráfica de rango vs dura
 ### Avance del proyecto
 Se empezo con la creacion de las piezas a usar para empezar a darles un color especifico para mas muestreos y que solo se base en una solo calidad de color y tomar mas muestras en diferentes entornos para mayor adquisicion de datos para tener menor cantidad de errores al momento de una variacion.
 
+### Avance del proyecto
+
+### Avance del proyecto
+
+1. ¿Qué características te quedaste y cuáles descartaste? ¿Por qué?
+Se conservaron características temporales como la media, desviación estándar, mínimo, máximo, rango, energía y duración. También se incluyeron características espectrales como la frecuencia dominante, el centroide espectral y la energía por bandas. No se descartaron características en esta etapa, ya que se utilizaron para evaluar cuáles aportaban más información a la clasificación.
+2. ¿Cuál característica separa mejor tus clases? ¿Coincidió con lo que predijiste en el bloque 1?
+La media de los valores del sensor fue una de las características más útiles para diferenciar los colores blanco, rojo y negro, debido a sus distintos niveles de reflexión infrarroja. Esto coincidió con lo esperado en el bloque 1, donde se había previsto que la intensidad de la señal permitiría distinguir los colores.
+3. Si tuviste que recapturar, ¿qué cambiaste y qué mejoró?
+Se completó la captura de 90 ventanas, obteniendo 30 muestras por cada color. También se corrigió el procesamiento para conservar los valores absolutos de la señal y evitar que la normalización eliminara las diferencias entre colores. Esto permitió generar un conjunto de características más adecuado para entrenar el clasificador KNN.
+
 ## Semana 6 
 ### Antes de clase 
 #### Bloque 1 
@@ -186,6 +208,20 @@ Por el momento no es posible determinarlo, ya que las gráficas solamente muestr
 3. ¿Conviene conservar las características espectrales o eliminarlas? ¿Por qué?
 Por ahora conviene conservarlas para continuar el análisis. Una vez que se tengan muestras de los tres colores, se podrá determinar si estas características ayudan a diferenciarlos o si es mejor eliminarlas.
 
+### Avance del proyecto
+
+### Avance del proyecto
+
+1. ¿La frecuencia te sirvió o no? Explica físicamente por qué.
+Las características de frecuencia sirvieron como información complementaria para analizar las variaciones de las señales del sensor TCR5000. Sin embargo, la principal diferencia entre los colores se encuentra en la intensidad de la luz infrarroja reflejada, por lo que las características temporales, especialmente la media, resultan más importantes para distinguir blanco, rojo y negro.
+2. ¿Cuál es la lista final de características con las que vas a entrenar?
+Se seleccionaron 13 características para el entrenamiento del clasificador KNN:
+- Temporales:media, desviación estándar, mínimo, máximo, rango, energía y duración.
+- Espectrales:frecuencia dominante, energía espectral, centroide espectral, banda baja, banda media y banda alta.
+Estas características permiten describir tanto la intensidad como las variaciones de las señales obtenidas del sensor.
+3. ¿Cómo se ve la separación de tus clases con el conjunto final? ¿Qué tan bien predices que funcionará el clasificador?
+Las clases presentan una separación favorable debido a las diferencias de intensidad registradas por el sensor TCR5000. Se espera que el clasificador KNN consiga una exactitud alta, aunque podrían presentarse pequeñas confusiones entre los colores rojo y blanco debido a la similitud de algunas mediciones.
+
 ## Semana 7
 ### Antes de clase 
 #### Bloque 1 
@@ -201,11 +237,42 @@ Porque puede memorizar los datos de entrenamiento sin aprender a identificar cor
 #### Bloque 2
 
 1. ¿Cuál fue tu exactitud en el conjunto de prueba?
-Por el momento no se obtuvo un porcentaje de exactitud, debido a que solamente cuento con una ventana correspondiente al color negro. Es necesario completar la recolección de datos para entrenar y evaluar correctamente el modelo.
+Se obtuvo una exactitud del 95.65 % en el conjunto de prueba, logrando clasificar correctamente 22 de las 23 muestras evaluadas. Esto demuestra que el modelo KNN tiene un buen desempeño para identificar los colores blanco, rojo y negro mediante el sensor TCR5000.
 2. ¿Qué par de clases se confunde más?
-Todavía no es posible identificar qué colores presentan mayor confusión, ya que se necesitan muestras de blanco, rojo y negro para generar la matriz de confusión y analizar las predicciones del clasificador.
-3. ¿El resultado coincidió con lo que predijiste en la semana 6?
-Durante las prácticas anteriores se observaron diferencias en los valores registrados por el sensor TCR5000 para los distintos colores. Por ello, se espera que el clasificador pueda diferenciarlos. Sin embargo, todavía no es posible comprobar esta predicción porque faltan muestras para realizar el entrenamiento.
+Las clases que presentaron confusión fueron rojo y blanco, ya que una muestra correspondiente al color rojo fue clasificada incorrectamente como blanco. Los demás colores se identificaron correctamente, como se observa en la matriz de confusión.
+3. ¿El resultado coincidió con lo que predijiste en la Semana 6?
+Sí, los resultados coincidieron con lo esperado en la Semana 6, ya que anteriormente se habían observado diferencias en los valores registrados por el sensor TCR5000 para cada color. Al entrenar el clasificador KNN, se obtuvo una exactitud del 95.65 %, lo que confirma que las características de las señales permiten distinguir los tres colores con buenos resultados en las muestras evaluadas.
+
+### Avance del proyecto
+
+## Semana 7 — Entrenamiento del clasificador
+
+Algoritmo seleccionado: K-Nearest Neighbors (KNN).
+
+Objetivo:Clasificar los colores blanco, rojo y negro utilizando las características temporales y espectrales obtenidas del sensor TCR5000.
+
+Configuración del modelo:
+- Algoritmo: KNN.
+- Número de vecinos (K): pendiente de verificar en `entrenar.py`.
+- Escalado de características: verificar configuración del `StandardScaler`.
+- Características utilizadas: 13.
+- Total de ventanas: 90.
+- Entrenamiento: 67 ventanas.
+- Prueba: 23 ventanas.
+
+Resultados:
+- Exactitud en entrenamiento: pendiente de calcular.
+- Exactitud en prueba: 95.65 %.
+- Predicciones correctas: 22.
+- Predicciones incorrectas: 1.
+- Principal confusión: rojo clasificado como blanco.
+
+Archivos:
+- `datos/features.csv`: características para el entrenamiento.
+- `modelo.pkl`: modelo entrenado.
+- `figuras/confusion.png`: matriz de confusión.
+
+Es necesario validar el modelo con nuevas capturas independientes para comprobar su capacidad de generalización.
 
 ## Semana 8
 ### Antes de clase 
