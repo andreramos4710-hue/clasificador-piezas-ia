@@ -1,0 +1,4 @@
+Modelo,Exactitud,Exactitud (%),Tiempo prediccion (ms)
+KNN Semana 7,0.9565217391304348,95.65,1.755
+MLP 10 neuronas,1.0,100.0,0.281
+MLP 50 neuronas,1.0,100.0,0.216

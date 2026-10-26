@@ -277,3 +277,22 @@ Es necesario validar el modelo con nuevas capturas independientes para comprobar
 ## Semana 8
 ### Antes de clase 
 #### Bloque 1 
+
+### Antes de la clase
+
+#### Comparación de modelos
+
+1. |    Modelo               | Exactitud train | Exactitud test |
+KNN (referencia)                95.24               85.71
+Red (10 neuronas)               100.00              100.00
+Red (50 neuronas)               100.00              100.00
+
+
+1. Modelo seleccionado:
+Justificación:Seleccioné este modelo porque obtuvo una exactitud de prueba de 95.24% y presentó un comportamiento adecuado entre entrenamiento y prueba. También consideraré su desempeño al clasificar piezas nuevas.
+
+1. ¿Por qué una red neuronal no necesariamente gana?
+Una red neuronal tiene más capacidad para aprender patrones complejos, pero necesita datos suficientes para generalizar correctamente. Con un conjunto pequeño como el mío, puede aprender demasiado los ejemplos de entrenamiento y cometer más errores con datos nuevos. Por eso debo comparar los resultados y no elegir un algoritmo solo por su complejidad.
+
+#### Bloque 2
+

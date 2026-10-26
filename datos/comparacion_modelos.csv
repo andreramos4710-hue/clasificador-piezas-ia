@@ -1,0 +1,4 @@
+Modelo,Exactitud train (%),Exactitud test (%)
+KNN (referencia),95.24,85.71
+Red (10 neuronas),100.0,100.0
+Red (50 neuronas),100.0,100.0
