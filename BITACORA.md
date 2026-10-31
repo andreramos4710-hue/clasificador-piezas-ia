@@ -137,9 +137,6 @@ Elegí la normalización Min-Max, porque las lecturas del sensor tienen un rango
 Después de corregir la línea base, las ventanas de una misma clase presentan formas más parecidas y comienzan cerca de un mismo nivel, ayudando a identificar las diferencias entre las piezas y no las variaciones. 
 
 ### Avance del proyecto
-
-### Avance del proyecto
-
 1. ¿Qué le hiciste a tu señal, en orden, y por qué en ese orden?
 Primero se revisaron los datos obtenidos del sensor TCR5000 para eliminar valores inválidos. Después se aplicó un filtro de media móvil para reducir el ruido de las mediciones. Finalmente, se conservaron los valores de intensidad de cada color para mantener las diferencias entre blanco, rojo y negro, generando el archivo `datos_limpios.csv`.
 2. ¿Qué tanto se parecen entre sí las ventanas de una misma clase después de limpiar, comparado con antes?**
@@ -174,15 +171,11 @@ Las clases Blanco y Rojo se encuentran encimadas en la gráfica de rango vs dura
 ### Avance del proyecto
 Se empezo con la creacion de las piezas a usar para empezar a darles un color especifico para mas muestreos y que solo se base en una solo calidad de color y tomar mas muestras en diferentes entornos para mayor adquisicion de datos para tener menor cantidad de errores al momento de una variacion.
 
-### Avance del proyecto
-
-### Avance del proyecto
-
 1. ¿Qué características te quedaste y cuáles descartaste? ¿Por qué?
 Se conservaron características temporales como la media, desviación estándar, mínimo, máximo, rango, energía y duración. También se incluyeron características espectrales como la frecuencia dominante, el centroide espectral y la energía por bandas. No se descartaron características en esta etapa, ya que se utilizaron para evaluar cuáles aportaban más información a la clasificación.
-2. ¿Cuál característica separa mejor tus clases? ¿Coincidió con lo que predijiste en el bloque 1?
+1. ¿Cuál característica separa mejor tus clases? ¿Coincidió con lo que predijiste en el bloque 1?
 La media de los valores del sensor fue una de las características más útiles para diferenciar los colores blanco, rojo y negro, debido a sus distintos niveles de reflexión infrarroja. Esto coincidió con lo esperado en el bloque 1, donde se había previsto que la intensidad de la señal permitiría distinguir los colores.
-3. Si tuviste que recapturar, ¿qué cambiaste y qué mejoró?
+1. Si tuviste que recapturar, ¿qué cambiaste y qué mejoró?
 Se completó la captura de 90 ventanas, obteniendo 30 muestras por cada color. También se corrigió el procesamiento para conservar los valores absolutos de la señal y evitar que la normalización eliminara las diferencias entre colores. Esto permitió generar un conjunto de características más adecuado para entrenar el clasificador KNN.
 
 ## Semana 6 
@@ -210,16 +203,14 @@ Por ahora conviene conservarlas para continuar el análisis. Una vez que se teng
 
 ### Avance del proyecto
 
-### Avance del proyecto
-
 1. ¿La frecuencia te sirvió o no? Explica físicamente por qué.
 Las características de frecuencia sirvieron como información complementaria para analizar las variaciones de las señales del sensor TCR5000. Sin embargo, la principal diferencia entre los colores se encuentra en la intensidad de la luz infrarroja reflejada, por lo que las características temporales, especialmente la media, resultan más importantes para distinguir blanco, rojo y negro.
-2. ¿Cuál es la lista final de características con las que vas a entrenar?
+1. ¿Cuál es la lista final de características con las que vas a entrenar?
 Se seleccionaron 13 características para el entrenamiento del clasificador KNN:
 - Temporales:media, desviación estándar, mínimo, máximo, rango, energía y duración.
 - Espectrales:frecuencia dominante, energía espectral, centroide espectral, banda baja, banda media y banda alta.
 Estas características permiten describir tanto la intensidad como las variaciones de las señales obtenidas del sensor.
-3. ¿Cómo se ve la separación de tus clases con el conjunto final? ¿Qué tan bien predices que funcionará el clasificador?
+1. ¿Cómo se ve la separación de tus clases con el conjunto final? ¿Qué tan bien predices que funcionará el clasificador?
 Las clases presentan una separación favorable debido a las diferencias de intensidad registradas por el sensor TCR5000. Se espera que el clasificador KNN consiga una exactitud alta, aunque podrían presentarse pequeñas confusiones entre los colores rojo y blanco debido a la similitud de algunas mediciones.
 
 ## Semana 7
@@ -244,11 +235,7 @@ Las clases que presentaron confusión fueron rojo y blanco, ya que una muestra c
 Sí, los resultados coincidieron con lo esperado en la Semana 6, ya que anteriormente se habían observado diferencias en los valores registrados por el sensor TCR5000 para cada color. Al entrenar el clasificador KNN, se obtuvo una exactitud del 95.65 %, lo que confirma que las características de las señales permiten distinguir los tres colores con buenos resultados en las muestras evaluadas.
 
 ### Avance del proyecto
-
-## Semana 7 — Entrenamiento del clasificador
-
 Algoritmo seleccionado: K-Nearest Neighbors (KNN).
-
 Objetivo:Clasificar los colores blanco, rojo y negro utilizando las características temporales y espectrales obtenidas del sensor TCR5000.
 
 Configuración del modelo:
@@ -277,22 +264,66 @@ Es necesario validar el modelo con nuevas capturas independientes para comprobar
 ## Semana 8
 ### Antes de clase 
 #### Bloque 1 
-
-### Antes de la clase
-
-#### Comparación de modelos
-
 1. |    Modelo               | Exactitud train | Exactitud test |
 KNN (referencia)                95.24               85.71
 Red (10 neuronas)               100.00              100.00
 Red (50 neuronas)               100.00              100.00
 
 
-1. Modelo seleccionado:
+2. Modelo seleccionado:
 Justificación:Seleccioné este modelo porque obtuvo una exactitud de prueba de 95.24% y presentó un comportamiento adecuado entre entrenamiento y prueba. También consideraré su desempeño al clasificar piezas nuevas.
 
-1. ¿Por qué una red neuronal no necesariamente gana?
+3. ¿Por qué una red neuronal no necesariamente gana?
 Una red neuronal tiene más capacidad para aprender patrones complejos, pero necesita datos suficientes para generalizar correctamente. Con un conjunto pequeño como el mío, puede aprender demasiado los ejemplos de entrenamiento y cometer más errores con datos nuevos. Por eso debo comparar los resultados y no elegir un algoritmo solo por su complejidad.
 
 #### Bloque 2
 
+1. Tabla de acciones del sistema clasificador
+El sistema utiliza un protocolo de comunicación serial mediante el cual Python envía un carácter a Arduino dependiendo de la clasificación realizada por el modelo KNN.
+
+| Carácter | Clase identificada | Acción del servomotor | Justificación |
+
+| A        | Negro              | Gira a 45°            | Dirigir la pieza negra hacia su posición de clasificación. |
+| B        | Rojo               | Gira a 90°            | Dirigir la pieza roja hacia su posición correspondiente. |
+| C        | Blanco             | Gira a 135°           | Dirigir la pieza blanca hacia su posición correspondiente. |
+| 0        | Reposo             | Regresa a 90°         | Mantener una posición neutra cuando no se realiza una clasificación. |
+
+2. Justificación del funcionamiento
+La utilización del servomotor permite convertir la decisión del modelo de inteligencia artificial en un movimiento físico observable. De esta manera, el sistema no solamente identifica los colores de las piezas, sino que también permite establecer un mecanismo de separación según la clasificación obtenida. Las posiciones indicadas representan la configuración programada y deberán validarse mediante pruebas físicas del actuador.
+
+### Avance del proyecto
+
+1. Integración del sistema
+Durante esta etapa se trabajó en la integración del sensor TCR5000 con Arduino y Python para desarrollar un sistema de clasificación automática de colores mediante un modelo de inteligencia artificial KNN.
+El programa recibe las lecturas del sensor, procesa las señales en ventanas de 200 muestras y utiliza el modelo entrenado para identificar piezas negras, rojas y blancas. Posteriormente, Python envía una orden mediante comunicación serial a Arduino para controlar un servomotor.
+
+2. Tabla de acciones
+
+| Carácter | Clase | Acción del actuador |
+| A | Negro | Posiciona el servomotor para dirigir la pieza negra. |
+| B | Rojo | Posiciona el servomotor para dirigir la pieza roja. |
+| C | Blanco | Posiciona el servomotor para dirigir la pieza blanca. |
+| 0 | Reposo | Regresa el servomotor a su posición neutra. |
+
+3. Exactitud de clasificación en vivo
+Se realizaron pruebas físicas con diez piezas de cada clase para comparar el funcionamiento del modelo en tiempo real con los resultados obtenidos durante su evaluación con los datos CSV.
+| Clase | Pruebas | Aciertos | Exactitud |
+|---|---:|---:|---:|
+| Negro | 10 | Pendiente | Pendiente |
+| Rojo | 10 | Pendiente | Pendiente |
+| Blanco | 10 | Pendiente | Pendiente |
+| Total | 30 | Pendiente | Pendiente |
+La exactitud en vivo se comparará con la exactitud obtenida durante la evaluación del conjunto de datos CSV. Las posibles diferencias pueden deberse a variaciones en la iluminación, distancia entre la pieza y el sensor, ruido en las lecturas y condiciones físicas durante las pruebas.
+
+4. Problemas encontrados y soluciones
+Durante la integración se identificó la necesidad de verificar la comunicación serial entre Arduino y Python, así como el funcionamiento del servomotor.
+También se revisaron las velocidades de comunicación serial para mantener la misma configuración en ambos programas, utilizando 115200 baudios.
+Se trabajó en la integración de las funciones de captura, limpieza y extracción de características para conservar el mismo procesamiento utilizado durante el entrenamiento del modelo KNN.
+Los resultados definitivos de estas pruebas se documentarán una vez comprobado el funcionamiento físico del sistema.
+
+5. Evidencias
+Se agregarán fotografías y un video que demuestren el funcionamiento del sensor, la clasificación realizada por Python y la respuesta física del servomotor.
+
+6. Conclusión del avance
+
+El proyecto avanzó hacia la integración de un sistema mecatrónico inteligente capaz de identificar diferentes colores mediante procesamiento de señales e inteligencia artificial. La siguiente etapa consiste en validar experimentalmente la clasificación en tiempo real, comprobar la respuesta del actuador y documentar los resultados obtenidos.
