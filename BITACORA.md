@@ -352,3 +352,34 @@ Al observar la gráfica de PCA, puedo identificar que mis tres clases presentan 
 
 3. ¿Viste algún punto atípico? ¿Cuál ventana era y qué encontraste al graficar su señal?
 En la gráfica se observan dos posibles puntos atípicos: uno correspondiente al color negro, bastante alejado hacia la derecha, y otro correspondiente al color blanco. 
+
+## Semana 11 Agrupamiento: K-Means y DBSCAN
+### Antes de clase 
+#### Bloque 1 
+
+
+
+1. Tabla cruzada de resultados
+
+| Color real | Grupo 0 | Grupo 1 | Grupo 2 | Grupo 3 |
+
+| Blanco     | 2       | 0       | 0       | 28      |
+| Negro      | 0       | 30      | 1       | 0       |
+| Rojo       | 19      | 0       | 0       | 11      |
+
+1. ¿K-Means encontró tus clases o no
+Al aumentar el número de clústeres de tres a cuatro, obtuve una separación más detallada de los datos. Las piezas negras quedaron prácticamente separadas en su propio grupo, mientras que las piezas blancas se concentraron principalmente en el grupo 3 y las rojas se distribuyeron entre los grupos 0 y 3. Esto demuestra que existen similitudes entre algunas señales de los colores rojo y blanco, por lo que K-Means no logró separarlos completamente.
+
+1. Si no encontró las clases, ¿qué crees que separó en su lugar?
+El algoritmo agrupó las muestras según las similitudes de sus características estadísticas y espectrales. Al utilizar cuatro clústeres, dividió las muestras que anteriormente estaban juntas en grupos más específicos. También identificó una ventana negra aislada, correspondiente a la ventana 0, que presenta características diferentes al resto. Esto demuestra que el número de clústeres influye en la organización de los datos y que las agrupaciones naturales no siempre coinciden exactamente con los colores originales.
+
+
+
+
+
+| Color real | Grupo 0 | Grupo 1 | Grupo 2 | Grupo 3 |
+
+| Blanco     | 2       | 0       | 0       | 28      |
+| Negro      | 0       | 30      | 1       | 0       |
+| Rojo       | 19      | 0       | 0       | 11      |
+
