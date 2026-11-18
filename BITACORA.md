@@ -342,3 +342,17 @@ Por ejemplo, si mi sistema está entrenado para identificar piezas rojas, blanca
 3. ¿Con tus palabras, ¿qué busca PCA?
 PCA reduce las dimensiones, conserva la mayor cantidad de información posible y permite visualizar patrones y agrupaciones.
 
+## Semana 10
+### Antes de clase 
+#### Bloque 2
+
+### Bloque 2: PCA sobre mi dataset
+
+1. ¿Qué porcentaje de varianza explican tus dos primeras componentes?
+Las dos primeras componentes principales explican un total de 82.24% de la varianza de mis datos. La primera componente (PC1) representa el 51.86%, mientras que la segunda componente (PC2) representa el 30.38%. Esto significa que al reducir mis 12 características a dos dimensiones conservo el 82.24% de la variación original de los datos.
+
+2. ¿Tus clases se separan solas en el plano de PCA? ¿Qué significa que sí o que no?
+Al observar la gráfica de PCA, puedo identificar que mis tres clases presentan agrupaciones bastante diferenciadas. El color negro se concentra principalmente en la parte superior, el rojo en la zona central y el blanco en la parte inferior. Esto significa que las características extraídas de las señales del sensor contienen información útil para distinguir los diferentes colores. Sin embargo, existen algunos puntos cercanos entre las agrupaciones de rojo y blanco.
+
+3. ¿Viste algún punto atípico? ¿Cuál ventana era y qué encontraste al graficar su señal?
+En la gráfica se observan dos posibles puntos atípicos: uno correspondiente al color negro, bastante alejado hacia la derecha, y otro correspondiente al color blanco. 
