@@ -327,3 +327,18 @@ Se agregarán fotografías y un video que demuestren el funcionamiento del senso
 6. Conclusión del avance
 
 El proyecto avanzó hacia la integración de un sistema mecatrónico inteligente capaz de identificar diferentes colores mediante procesamiento de señales e inteligencia artificial. La siguiente etapa consiste en validar experimentalmente la clasificación en tiempo real, comprobar la respuesta del actuador y documentar los resultados obtenidos.
+
+## Semana 10
+### Antes de clase 
+#### Bloque 1 
+
+1. ¿Cuántas características tiene tu features.csv y por qué eso es difícil de visualizar?
+Mi archivo features.csv contiene 13 características que describen el comportamiento de las señales obtenidas durante el análisis de las piezas. Estas características incluyen medidas estadísticas, como la media, desviación, mínimo, máximo y rango, además de características relacionadas con la energía y las frecuencias de la señal. Utilizaré PCA para reducir las dimensiones y facilitar la visualización, conservando la mayor cantidad posible de información.
+
+2. ¿Qué le pasaría a tu sistema actual si por la banda pasara un objeto que no es ninguna de tus tres clases?
+Si por la banda transportadora pasara una pieza de un color diferente a los tres colores con los que entrené mi modelo, el sistema probablemente la clasificaría dentro de alguna de las tres categorías conocidas, aunque realmente no pertenezca a ninguna, porque mi modelo fue entrenado de manera supervisada y solamente reconoce los colores que tiene registrados.
+Por ejemplo, si mi sistema está entrenado para identificar piezas rojas, blancas y negras, y pasa una pieza amarilla, podría clasificarla incorrectamente como roja, blanca o negra. Esto demuestra la importancia de implementar métodos no supervisados que permitan identificar colores desconocidos y diferenciarlos de las clases que el sistema ya conoce.
+
+3. ¿Con tus palabras, ¿qué busca PCA?
+PCA reduce las dimensiones, conserva la mayor cantidad de información posible y permite visualizar patrones y agrupaciones.
+
