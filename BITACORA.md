@@ -342,10 +342,6 @@ Por ejemplo, si mi sistema está entrenado para identificar piezas rojas, blanca
 3. ¿Con tus palabras, ¿qué busca PCA?
 PCA reduce las dimensiones, conserva la mayor cantidad de información posible y permite visualizar patrones y agrupaciones.
 
-## Semana 10
-### Antes de clase 
-#### Bloque 2
-
 ### Bloque 2: PCA sobre mi dataset
 
 1. ¿Qué porcentaje de varianza explican tus dos primeras componentes?

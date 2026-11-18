@@ -27,7 +27,7 @@ carpeta_figuras = os.path.join(
 os.makedirs(carpeta_figuras, exist_ok=True)
 
 ruta_salida = os.path.join(
-    carpeta_figuras, "pca.png"
+    carpeta_figuras, "pca_3d.png"
 )
 
 # 2. LEER DATASET
@@ -55,9 +55,9 @@ escalador = StandardScaler()
 
 X_esc = escalador.fit_transform(X)
 
-# 5. APLICAR PCA
+# 5. APLICAR PCA CON TRES COMPONENTES
 
-pca = PCA(n_components=2)
+pca = PCA(n_components=3)
 
 componentes = pca.fit_transform(X_esc)
 
@@ -66,14 +66,15 @@ varianza = pca.explained_variance_ratio_
 print("\nVarianza explicada:")
 print("PC1:", varianza[0] * 100, "%")
 print("PC2:", varianza[1] * 100, "%")
+print("PC3:", varianza[2] * 100, "%")
 
 print(
-    "Varianza acumulada:",
+    "Varianza acumulada de las tres:",
     varianza.sum() * 100,
     "%"
 )
 
-# 6. GRAFICAR LOS RESULTADOS
+# 6. GRAFICA TRIDIMENSIONAL
 
 colores = {
     "negro": "black",
@@ -81,37 +82,47 @@ colores = {
     "blanco": "royalblue"
 }
 
-plt.figure(figsize=(10, 7))
+fig = plt.figure(figsize=(11, 8))
+
+ax = fig.add_subplot(111, projection="3d")
 
 for clase in y.unique():
 
     mascara = y == clase
 
-    plt.scatter(
+    ax.scatter(
         componentes[mascara, 0],
         componentes[mascara, 1],
+        componentes[mascara, 2],
         label=clase.capitalize(),
         color=colores.get(clase),
-        alpha=0.75
+        alpha=0.75,
+        s=50
     )
 
-plt.xlabel(
+# 7. ETIQUETAR LOS TRES EJES
+
+ax.set_xlabel(
     f"PC1 ({varianza[0] * 100:.2f}%)"
 )
 
-plt.ylabel(
+ax.set_ylabel(
     f"PC2 ({varianza[1] * 100:.2f}%)"
 )
 
-plt.title(
-    "PCA - Clasificacion de colores TCR5000"
+ax.set_zlabel(
+    f"PC3 ({varianza[2] * 100:.2f}%)"
 )
 
-plt.legend(title="Color")
-plt.grid(alpha=0.3)
+ax.set_title(
+    "PCA 3D - Clasificacion de colores TCR5000"
+)
+
+ax.legend(title="Color")
+
 plt.tight_layout()
 
-# 7. GUARDAR GRAFICA
+# 8. GUARDAR GRAFICA
 
 plt.savefig(
     ruta_salida,
@@ -120,20 +131,24 @@ plt.savefig(
 
 plt.show()
 
-print("\nGrafica guardada en:")
+print("\nGrafica 3D guardada en:")
 print(ruta_salida)
 
-# 8. GUARDAR COORDENADAS PCA POR VENTANA
+# 9. GUARDAR COORDENADAS PCA POR VENTANA
 
 resultado = pd.DataFrame({
     "ventana": ventanas,
     "etiqueta": y,
     "PC1": componentes[:, 0],
-    "PC2": componentes[:, 1]
+    "PC2": componentes[:, 1],
+    "PC3": componentes[:, 2]
 })
 
 resultado.to_csv(
-    os.path.join(carpeta_figuras, "coordenadas_pca.csv"),
+    os.path.join(
+        carpeta_figuras,
+        "coordenadas_pca.csv"
+    ),
     index=False
 )
 
